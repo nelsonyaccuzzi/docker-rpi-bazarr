@@ -3,11 +3,11 @@ ARG BAZZAR_PATH=/var/lib/bazarr
 FROM arm32v7/alpine:edge as git
 
 ARG BAZZAR_PATH
-ARG BAZARR_VERSION=0.8.4.3
+ARG VERSION
 
 RUN apk add --no-cache git \
  && git clone https://github.com/morpheus65535/bazarr.git $BAZZAR_PATH \
- && git -C $BAZZAR_PATH checkout tags/v$BAZARR_VERSION \    
+ && git -C $BAZZAR_PATH checkout tags/v$VERSION \    
  && rm -rf $BAZZAR_PATH/.git $BAZZAR_PATH/bin/{Windows, MacOSX}
 
 FROM arm32v7/python:3.7-alpine
