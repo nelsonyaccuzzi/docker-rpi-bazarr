@@ -1,21 +1,23 @@
+ARG BAZZAR_PATH=/var/lib/bazarr
+
 FROM arm32v7/alpine:edge as git
 
-ARG BAZARR_CP=/var/lib/bazarr
+ARG BAZZAR_PATH
+ARG BAZARR_VERSION=0.8.4.3
 
-RUN apk add git \
- && git clone https://github.com/morpheus65535/bazarr.git $BAZARR_CP\
- && rm -rf $BAZARR_CP/.git $BAZARR_CP/bin/{Windows, MacOSX}
+RUN apk add --no-cache git \
+ && git clone https://github.com/morpheus65535/bazarr.git $BAZZAR_PATH \
+ && git -C $BAZZAR_PATH checkout tags/v$BAZARR_VERSION \    
+ && rm -rf $BAZZAR_PATH/.git $BAZZAR_PATH/bin/{Windows, MacOSX}
 
 FROM arm32v7/python:3.7-alpine
 
-ARG BAZARR_CP=/var/lib/bazarr
+ARG BAZZAR_PATH
 
 RUN apk add --no-cache libxml2-dev libxslt-dev git
 
-COPY --from=git $BAZARR_CP $BAZARR_CP
+COPY --from=git $BAZZAR_PATH $BAZZAR_PATH
 
-VOLUME ["/config", "/data"]
-
-WORKDIR $BAZARR_CP
+WORKDIR $BAZZAR_PATH
 
 CMD ["python", "bazarr.py", "-c", "/config", "--debug","True"]
