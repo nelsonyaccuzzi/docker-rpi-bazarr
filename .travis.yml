@@ -1,7 +1,10 @@
+dist: bionic
 addons:
   apt:
+    sources:
+      - docker-bionic
     packages:
-      - docker-ce
+      - docker
 services:
   - docker
 script: docker --version
