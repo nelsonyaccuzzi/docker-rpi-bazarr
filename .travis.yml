@@ -9,4 +9,13 @@ before_install:
 install:
   - docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
   - docker buildx create --name xbuilder --use
-script: ./scripts/build.sh
+script:
+  - |
+    if [ "$TRAVIS_PULL_REQUEST" = "true" ] || [ "$TRAVIS_BRANCH" != "master" ]; then
+      docker buildx build --progress plain --build-arg SW_VERSION=$SW_VERSION --platform=linux/arm/v7 .
+    fi
+  - echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin &> /dev/null
+  - docker buildx build --progress plain --build-arg SW_VERSION=$SW_VERSION --platform=linux/arm/v7 -t $TRAVIS_REPO_SLUG:$SW_VERSION .
+  - docker tag $TRAVIS_REPO_SLUG:$SW_VERSION $TRAVIS_REPO_SLUG:latest
+  - docker push $TRAVIS_REPO_SLUG
+  
