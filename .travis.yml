@@ -9,5 +9,5 @@ script:
  - sudo systemctl status docker
  - docker version
  - echo '{"experimental":"enabled"}' | sudo tee /etc/docker/daemon.json
- - sudo systemctl restart docker
+ - sudo service docker restart
  - docker version 
