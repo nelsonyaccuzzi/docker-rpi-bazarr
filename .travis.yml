@@ -15,7 +15,7 @@ script:
       docker buildx build --progress plain --build-arg SW_VERSION=$SW_VERSION --platform=linux/arm/v7 .
     fi
   - echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin &> /dev/null
-  - docker buildx build --progress plain --build-arg SW_VERSION=$SW_VERSION --platform=linux/arm/v7 -t $TRAVIS_REPO_SLUG:$SW_VERSION .
+  - docker buildx build --progress plain --output type=docker --build-arg SW_VERSION=$SW_VERSION --platform=linux/arm/v7 -t $TRAVIS_REPO_SLUG:$SW_VERSION .
   - docker tag $TRAVIS_REPO_SLUG:$SW_VERSION $TRAVIS_REPO_SLUG:latest
   - docker push $TRAVIS_REPO_SLUG
   
