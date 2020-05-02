@@ -6,8 +6,8 @@ before_install:
   - sudo apt-get -y -o Dpkg::Options::="--force-confnew" install docker-ce
 script: 
  - cat /etc/docker/daemon.json
- - systemctl status docker
+ - sudo systemctl status docker
  - docker version
- - echo '{"experimental":"enabled"}' > /etc/docker/daemon.json
- - systemctl restart docker
+ - sudo echo '{"experimental":"enabled"}' > /etc/docker/daemon.json
+ - sudo systemctl restart docker
  - docker version 
